@@ -32,7 +32,9 @@ class GenericDownloader(BaseDownloader):
             'motherless.com': self._handle_motherless,
             'eporner.com': self._handle_eporner,
             'faphouse.com': self._handle_faphouse,
-            'onlyfans.com': self._handle_onlyfans
+            'onlyfans.com': self._handle_onlyfans,
+            'erome.com': self._handle_erome,
+            'kwai.com': self._handle_kwai
         }
         
     def download(self, url: str, options: Dict[str, Any], 
@@ -173,6 +175,26 @@ class GenericDownloader(BaseDownloader):
                         progress_callback: Optional[Callable[[int], None]]) -> Dict[str, Any]:
         """Handle OnlyFans downloads."""
         return {'success': False, 'error': 'OnlyFans requires authentication and API access. Please provide your OnlyFans session cookies or API credentials.'}
+
+    def _handle_erome(self, url: str, options: Dict[str, Any], 
+                     progress_callback: Optional[Callable[[int], None]]) -> Dict[str, Any]:
+        """Handle Erome downloads."""
+        try:
+            from downloaders.erome_downloader import EromeDownloader
+            downloader = EromeDownloader(self.config_manager)
+            return downloader.download(url, options, progress_callback)
+        except ImportError:
+            return self._handle_generic_adult_site(url, options, progress_callback, 'erome')
+
+    def _handle_kwai(self, url: str, options: Dict[str, Any], 
+                    progress_callback: Optional[Callable[[int], None]]) -> Dict[str, Any]:
+        """Handle Kwai downloads."""
+        try:
+            from downloaders.kwai_downloader import KwaiDownloader
+            downloader = KwaiDownloader(self.config_manager)
+            return downloader.download(url, options, progress_callback)
+        except ImportError:
+            return self._handle_generic_adult_site(url, options, progress_callback, 'kwai')
         
     def _handle_generic_adult_site(self, url: str, options: Dict[str, Any], 
                                   progress_callback: Optional[Callable[[int], None]], 

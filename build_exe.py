@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """
 Script para compilar el Social Media Bulk Downloader a un ejecutable .exe
@@ -10,11 +9,12 @@ import shutil
 import subprocess
 from pathlib import Path
 
+
 def build_executable():
     """Construye el ejecutable usando PyInstaller."""
-    
+
     print("🔨 Iniciando compilación del ejecutable...")
-    
+
     # Verificar que PyInstaller esté instalado
     try:
         import PyInstaller
@@ -22,15 +22,15 @@ def build_executable():
     except ImportError:
         print("❌ PyInstaller no está instalado. Instalando...")
         subprocess.run([sys.executable, "-m", "pip", "install", "pyinstaller"])
-    
+
     # Limpiar compilaciones anteriores
     if os.path.exists("dist"):
         shutil.rmtree("dist")
         print("🧹 Limpiando compilaciones anteriores...")
-    
+
     if os.path.exists("build"):
         shutil.rmtree("build")
-    
+
     # Configuración de PyInstaller
     pyinstaller_args = [
         "pyinstaller",
@@ -40,7 +40,7 @@ def build_executable():
         "--clean",  # Limpiar cache
         # Incluir recursos y módulos
         "--add-data=config;config",
-        "--add-data=gui;gui", 
+        "--add-data=gui;gui",
         "--add-data=utils;utils",
         "--add-data=downloaders;downloaders",
         # Imports ocultos críticos
@@ -52,7 +52,7 @@ def build_executable():
         "--hidden-import=PIL._tkinter_finder",
         "--hidden-import=requests",
         "--hidden-import=yt_dlp",
-        "--hidden-import=trafilatura", 
+        "--hidden-import=trafilatura",
         "--hidden-import=cryptography",
         "--hidden-import=cryptography.fernet",
         "--hidden-import=keyring",
@@ -83,26 +83,31 @@ def build_executable():
         "--exclude-module=scipy",
         "main.py"
     ]
-    
+
     try:
         # Ejecutar PyInstaller
         print("⚡ Compilando ejecutable...")
-        result = subprocess.run(pyinstaller_args, check=True, capture_output=True, text=True)
-        
+        result = subprocess.run(pyinstaller_args,
+                                check=True,
+                                capture_output=True,
+                                text=True)
+
         if result.returncode == 0:
             print("✅ ¡Ejecutable creado exitosamente!")
-            print(f"📁 Ubicación: {os.path.abspath('dist/SocialMediaDownloader.exe')}")
-            
+            print(
+                f"📁 Ubicación: {os.path.abspath('dist/SocialMediaDownloader.exe')}"
+            )
+
             # Crear carpeta de distribución
             dist_folder = "SocialMediaDownloader_Portable"
             if os.path.exists(dist_folder):
                 shutil.rmtree(dist_folder)
-            
+
             os.makedirs(dist_folder)
-            
+
             # Copiar ejecutable
             shutil.copy("dist/SocialMediaDownloader.exe", dist_folder)
-            
+
             # Crear archivo README
             with open(f"{dist_folder}/README.txt", "w", encoding="utf-8") as f:
                 f.write("""Social Media Bulk Downloader - Versión Portable
@@ -124,20 +129,21 @@ Soporte:
 
 ¡Disfruta descargando contenido de redes sociales!
 """)
-            
+
             print(f"📦 Carpeta portable creada: {dist_folder}/")
             print("🎉 ¡Listo para distribuir!")
-            
+
         else:
             print("❌ Error durante la compilación:")
             print(result.stderr)
-            
+
     except subprocess.CalledProcessError as e:
         print(f"❌ Error ejecutando PyInstaller: {e}")
         print(f"Output: {e.stdout}")
         print(f"Error: {e.stderr}")
     except Exception as e:
         print(f"❌ Error inesperado: {e}")
+
 
 if __name__ == "__main__":
     build_executable()

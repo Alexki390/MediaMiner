@@ -35,23 +35,52 @@ from gui.main_window import MainWindow
 from utils.logger import setup_logging
 from utils.config_manager import ConfigManager
 
+def detect_platform(url: str) -> str:
+    """Detect platform from URL."""
+    url_lower = url.lower()
+
+    if 'youtube.com' in url_lower or 'youtu.be' in url_lower:
+        return 'youtube'
+    elif 'tiktok.com' in url_lower:
+        return 'tiktok'
+    elif 'instagram.com' in url_lower:
+        return 'instagram'
+    elif 'twitter.com' in url_lower or 'x.com' in url_lower:
+        return 'twitter'
+    elif 'reddit.com' in url_lower:
+        return 'reddit'
+    elif 'pornhub.com' in url_lower:
+        return 'pornhub'
+    elif 'redgifs.com' in url_lower:
+        return 'redgifs'
+    elif 'xvideos.com' in url_lower:
+        return 'xvideos'
+    elif 'coomer.su' in url_lower or 'coomer.party' in url_lower:
+        return 'coomer'
+    elif 'kemono.su' in url_lower or 'kemono.party' in url_lower:
+        return 'kemono'
+    elif any(site in url_lower for site in ['urlebird.com', 'ttthots.com', 'sotwe.com', 'fapsly.com', 'imhentai.xxx', 'hentaiera.com', 'nhentai.net']):
+        return 'adult_sites'
+    else:
+        return 'generic'
+
 def main():
     """Main application entry point."""
     try:
         # Setup logging
         setup_logging()
         logging.info("Starting Social Media Bulk Downloader")
-        
+
         # Initialize configuration
         config_manager = ConfigManager()
-        
+
         # Create main window
         root = tk.Tk()
         app = MainWindow(root, config_manager)
-        
+
         # Start the application
         root.mainloop()
-        
+
     except Exception as e:
         logging.error(f"Fatal error starting application: {e}")
         messagebox.showerror("Fatal Error", f"Failed to start application:\n{e}")

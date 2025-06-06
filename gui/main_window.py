@@ -36,7 +36,9 @@ class MainWindow:
             'redgifs': RedgifsDownloader(config_manager),
             'pornhub': PornhubDownloader(config_manager),
             'twitter': TwitterDownloader(config_manager),
-            'generic': GenericDownloader(config_manager)
+            'generic': GenericDownloader(config_manager),
+            'erome': self._get_erome_downloader(config_manager),
+            'kwai': self._get_kwai_downloader(config_manager)
         }
 
         # Setup GUI
@@ -143,6 +145,21 @@ class MainWindow:
         generic_frame = ttk.Frame(self.notebook, padding="10")
         self.notebook.add(generic_frame, text="Otros Sitios")
         self.create_generic_tab(generic_frame)
+
+        # Erome tab
+        erome_frame = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(erome_frame, text="Erome")
+        self.create_erome_tab(erome_frame)
+
+        # Kwai tab
+        kwai_frame = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(kwai_frame, text="Kwai")
+        self.create_kwai_tab(kwai_frame)
+
+        # Batch URLs tab
+        batch_frame = ttk.Frame(self.notebook, padding="10")
+        self.notebook.add(batch_frame, text="URLs Múltiples")
+        self.create_batch_urls_tab(batch_frame)
 
     def create_youtube_tab(self, parent):
         """Create YouTube download interface."""
@@ -585,4 +602,327 @@ class MainWindow:
 
         except Exception as e:
             messagebox.showerror("Error", f"Error abriendo gestión de cookies: {e}")
-```
+
+    def _get_erome_downloader(self, config_manager):
+        """Get Erome downloader if available."""
+        try:
+            from downloaders.erome_downloader import EromeDownloader
+            return EromeDownloader(config_manager)
+        except ImportError as e:
+            logging.warning(f"Erome downloader not available: {e}")
+            return None
+
+    def _get_kwai_downloader(self, config_manager):
+        """Get Kwai downloader if available."""
+        try:
+            from downloaders.kwai_downloader import KwaiDownloader
+            return KwaiDownloader(config_manager)
+        except ImportError as e:
+            logging.warning(f"Kwai downloader not available: {e}")
+            return None
+
+    def create_erome_tab(self, parent):
+        """Create Erome download interface."""
+        # URL input
+        ttk.Label(parent, text="URL de Album/Usuario de Erome:").grid(row=0, column=0, sticky=tk.W, pady=(0, 5))
+        self.erome_url_var = tk.StringVar()
+        url_entry = ttk.Entry(parent, textvariable=self.erome_url_var, width=60)
+        url_entry.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+
+        # Options
+        options_frame = ttk.LabelFrame(parent, text="Opciones", padding="5")
+        options_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+
+        self.erome_max_pages = tk.IntVar(value=10)
+        ttk.Label(options_frame, text="Máximo páginas (perfiles):").grid(row=0, column=0, sticky=tk.W, pady=(5, 0))
+        ttk.Spinbox(options_frame, from_=1, to=50, textvariable=self.erome_max_pages, width=10).grid(row=0, column=1, sticky=tk.W, padx=(5, 0), pady=(5, 0))
+
+        # Info
+        info_text = """• Soporta albums individuales y perfiles completos
+• Descarga automática de videos e imágenes
+• Organización por album/usuario"""
+
+        info_label = ttk.Label(options_frame, text=info_text, justify=tk.LEFT, font=('TkDefaultFont', 8))
+        info_label.grid(row=1, column=0, columnspan=2, sticky=tk.W, pady=(10, 0))
+
+        # Download button
+        ttk.Button(parent, text="Añadir a Cola", command=self.add_erome_download).grid(row=3, column=0, pady=(10, 0))
+
+        parent.columnconfigure(0, weight=1)
+
+    def create_kwai_tab(self, parent):
+        """Create Kwai download interface."""
+        # URL input
+        ttk.Label(parent, text="URL de Video/Usuario de Kwai:").grid(row=0, column=0, sticky=tk.W, pady=(0, 5))
+        self.kwai_url_var = tk.StringVar()
+        url_entry = ttk.Entry(parent, textvariable=self.kwai_url_var, width=60)
+        url_entry.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+
+        # Options
+        options_frame = ttk.LabelFrame(parent, text="Opciones", padding="5")
+        options_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+
+        self.kwai_limit = tk.IntVar(value=50)
+        ttk.Label(options_frame, text="Máximo videos:").grid(row=0, column=0, sticky=tk.W, pady=(5, 0))
+        ttk.Spinbox(options_frame, from_=1, to=500, textvariable=self.kwai_limit, width=10).grid(row=0, column=1, sticky=tk.W, padx=(5, 0), pady=(5, 0))
+
+        # Info
+        info_text = """• Videos cortos estilo TikTok
+• Perfiles completos de usuarios
+• Descarga en alta calidad"""
+
+        info_label = ttk.Label(options_frame, text=info_text, justify=tk.LEFT, font=('TkDefaultFont', 8))
+        info_label.grid(row=1, column=0, columnspan=2, sticky=tk.W, pady=(10, 0))
+
+        # Download button
+        ttk.Button(parent, text="Añadir a Cola", command=self.add_kwai_download).grid(row=3, column=0, pady=(10, 0))
+
+        parent.columnconfigure(0, weight=1)
+
+    def create_batch_urls_tab(self, parent):
+        """Create batch URLs download interface."""
+        # Instructions
+        ttk.Label(parent, text="URLs Múltiples (una por línea o separadas por comas):", 
+                 font=('TkDefaultFont', 10, 'bold')).grid(row=0, column=0, sticky=tk.W, pady=(0, 5))
+
+        # URL text area
+        text_frame = ttk.Frame(parent)
+        text_frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
+        text_frame.columnconfigure(0, weight=1)
+        text_frame.rowconfigure(0, weight=1)
+
+        self.batch_urls_text = tk.Text(text_frame, height=10, width=70, wrap=tk.WORD)
+        self.batch_urls_text.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        # Scrollbar for text area
+        scrollbar = ttk.Scrollbar(text_frame, orient=tk.VERTICAL, command=self.batch_urls_text.yview)
+        scrollbar.grid(row=0, column=1, sticky=(tk.N, tk.S))
+        self.batch_urls_text.configure(yscrollcommand=scrollbar.set)
+
+        # Options
+        options_frame = ttk.LabelFrame(parent, text="Opciones de Procesamiento", padding="5")
+        options_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
+
+        self.batch_auto_detect = tk.BooleanVar(value=True)
+        ttk.Checkbutton(options_frame, text="Auto-detectar plataforma", 
+                       variable=self.batch_auto_detect).grid(row=0, column=0, sticky=tk.W)
+
+        self.batch_skip_errors = tk.BooleanVar(value=True)
+        ttk.Checkbutton(options_frame, text="Continuar si hay errores", 
+                       variable=self.batch_skip_errors).grid(row=0, column=1, sticky=tk.W, padx=(20, 0))
+
+        self.batch_delay = tk.IntVar(value=5)
+        ttk.Label(options_frame, text="Delay entre descargas (seg):").grid(row=1, column=0, sticky=tk.W, pady=(5, 0))
+        ttk.Spinbox(options_frame, from_=1, to=30, textvariable=self.batch_delay, width=10).grid(row=1, column=1, sticky=tk.W, padx=(5, 0), pady=(5, 0))
+
+        # Buttons frame
+        buttons_frame = ttk.Frame(parent)
+        buttons_frame.grid(row=3, column=0, sticky=tk.W, pady=(10, 0))
+
+        ttk.Button(buttons_frame, text="Procesar URLs", command=self.process_batch_urls).pack(side=tk.LEFT, padx=(0, 10))
+        ttk.Button(buttons_frame, text="Limpiar", command=self.clear_batch_urls).pack(side=tk.LEFT, padx=(0, 10))
+        ttk.Button(buttons_frame, text="Validar URLs", command=self.validate_batch_urls).pack(side=tk.LEFT)
+
+        # Status label
+        self.batch_status_var = tk.StringVar(value="Listo para procesar URLs")
+        ttk.Label(parent, textvariable=self.batch_status_var, font=('TkDefaultFont', 8)).grid(row=4, column=0, sticky=tk.W, pady=(10, 0))
+
+        parent.columnconfigure(0, weight=1)
+        parent.rowconfigure(1, weight=1)
+
+    def add_erome_download(self):
+        """Add Erome download to queue."""
+        url = self.erome_url_var.get().strip()
+        if not url:
+            messagebox.showwarning("Advertencia", "Por favor ingresa una URL de Erome")
+            return
+
+        options = {
+            'max_pages': self.erome_max_pages.get()
+        }
+
+        self.download_queue.add_download('erome', url, options)
+        self.erome_url_var.set("")
+
+    def add_kwai_download(self):
+        """Add Kwai download to queue."""
+        url = self.kwai_url_var.get().strip()
+        if not url:
+            messagebox.showwarning("Advertencia", "Por favor ingresa una URL de Kwai")
+            return
+
+        options = {
+            'limit': self.kwai_limit.get()
+        }
+
+        self.download_queue.add_download('kwai', url, options)
+        self.kwai_url_var.set("")
+
+    def process_batch_urls(self):
+        """Process multiple URLs from text area."""
+        urls_text = self.batch_urls_text.get("1.0", tk.END).strip()
+
+        if not urls_text:
+            messagebox.showwarning("Advertencia", "Por favor ingresa al menos una URL")
+            return
+
+        # Parse URLs
+        urls = self._parse_multiple_urls(urls_text)
+
+        if not urls:
+            messagebox.showwarning("Advertencia", "No se encontraron URLs válidas")
+            return
+
+        self.batch_status_var.set(f"Procesando {len(urls)} URLs...")
+
+        # Process each URL
+        added_count = 0
+        failed_count = 0
+
+        for url in urls:
+            try:
+                platform = self._detect_url_platform(url)
+
+                if platform and platform in self.downloaders:
+                    options = self._get_default_options_for_platform(platform)
+                    self.download_queue.add_download(platform, url, options)
+                    added_count += 1
+                else:
+                    # Try generic downloader
+                    options = {'auto_detect': True, 'quality': 'best'}
+                    self.download_queue.add_download('generic', url, options)
+                    added_count += 1
+
+            except Exception as e:
+                logging.warning(f"Failed to process URL {url}: {e}")
+                failed_count += 1
+
+                if not self.batch_skip_errors.get():
+                    messagebox.showerror("Error", f"Error procesando URL: {url}\n{str(e)}")
+                    break
+
+        self.batch_status_var.set(f"Completado: {added_count} añadidas, {failed_count} fallidas")
+
+        if added_count > 0:
+            messagebox.showinfo("Completado", f"Se añadieron {added_count} descargas a la cola")
+
+    def validate_batch_urls(self):
+        """Validate URLs in text area."""
+        urls_text = self.batch_urls_text.get("1.0", tk.END).strip()
+
+        if not urls_text:
+            messagebox.showwarning("Advertencia", "Por favor ingresa URLs para validar")
+            return
+
+        urls = self._parse_multiple_urls(urls_text)
+
+        valid_count = 0
+        invalid_urls = []
+
+        for url in urls:
+            if self._is_valid_url(url):
+                valid_count += 1
+            else:
+                invalid_urls.append(url)
+
+        message = f"URLs válidas: {valid_count}\nURLs inválidas: {len(invalid_urls)}"
+
+        if invalid_urls:
+            message += f"\n\nURLs inválidas:\n" + "\n".join(invalid_urls[:5])
+            if len(invalid_urls) > 5:
+                message += f"\n... y {len(invalid_urls) - 5} más"
+
+        messagebox.showinfo("Validación de URLs", message)
+
+    def clear_batch_urls(self):
+        """Clear the batch URLs text area."""
+        self.batch_urls_text.delete("1.0", tk.END)
+        self.batch_status_var.set("Listo para procesar URLs")
+
+    def _parse_multiple_urls(self, text: str) -> list[str]:
+        """Parse multiple URLs from text input."""
+        import re
+
+        # Split by common separators
+        urls = []
+
+        # Split by newlines first
+        lines = text.split('\n')
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+
+            # Check if line contains multiple URLs separated by commas, spaces, or semicolons
+            if ',' in line:
+                parts = line.split(',')
+            elif ';' in line:
+                parts = line.split(';')
+            elif ' http' in line:
+                parts = re.split(r'\s+(?=https?://)', line)
+            else:
+                parts = [line]
+
+            for part in parts:
+                part = part.strip()
+                if part and self._is_valid_url(part):
+                    urls.append(part)
+
+        return list(set(urls))  # Remove duplicates
+
+    def _is_valid_url(self, url: str) -> bool:
+        """Check if URL is valid."""
+        import re
+
+        url_pattern = re.compile(
+            r'^https?://'  # http:// or https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain
+            r'localhost|'  # localhost
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # IP
+            r'(?::\d+)?'  # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+        return bool(url_pattern.match(url))
+
+    def _detect_url_platform(self, url: str) -> str:
+        """Detect platform from URL."""
+        url_lower = url.lower()
+
+        if 'youtube.com' in url_lower or 'youtu.be' in url_lower:
+            return 'youtube'
+        elif 'tiktok.com' in url_lower:
+            return 'tiktok'
+        elif 'instagram.com' in url_lower:
+            return 'instagram'
+        elif 'reddit.com' in url_lower:
+            return 'reddit'
+        elif 'redgifs.com' in url_lower:
+            return 'redgifs'
+        elif 'pornhub.com' in url_lower:
+            return 'pornhub'
+        elif 'twitter.com' in url_lower or 'x.com' in url_lower:
+            return 'twitter'
+        elif 'erome.com' in url_lower:
+            return 'erome'
+        elif 'kwai.com' in url_lower:
+            return 'kwai'
+        else:
+            return 'generic'
+
+    def _get_default_options_for_platform(self, platform: str) -> dict:
+        """Get default options for each platform."""
+        defaults = {
+            'youtube': {'quality': 'best', 'audio_only': False, 'entire_channel': False},
+            'tiktok': {'process_slideshows': True, 'limit': 50},
+            'instagram': {'include_stories': False, 'limit': 50},
+            'reddit': {'sort': 'hot', 'limit': 100},
+            'redgifs': {'quality': 'hd', 'limit': 50},
+            'pornhub': {'quality': '720p', 'limit': 25},
+            'twitter': {'media_only': True, 'limit': 100},
+            'erome': {'max_pages': 10},
+            'kwai': {'limit': 50},
+            'generic': {'auto_detect': True, 'quality': 'best'}
+        }
+
+        return defaults.get(platform, {})

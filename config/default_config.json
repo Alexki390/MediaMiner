@@ -146,7 +146,38 @@
     "create_subdirectories": true,
     "hash_algorithm": "md5",
     "backup_originals": false,
-    "compress_downloads": false,
+    "compress_downloads": false
+  },
+  "analytics": {
+    "enabled": true,
+    "anonymous_only": true,
+    "send_usage_stats": false
+  },
+  "updates": {
+    "check_on_startup": true,
+    "auto_download": false,
+    "update_channel": "stable"
+  },
+  "license": {
+    "trial_days": 30,
+    "features": {
+      "max_concurrent_downloads_trial": 2,
+      "max_concurrent_downloads_full": 10,
+      "supported_platforms_trial": ["youtube", "tiktok", "reddit"],
+      "supported_platforms_full": "all"
+    }
+  },
+  "backup": {
+    "enabled": false,
+    "backup_directory": "~/Downloads/SocialMediaDownloader/backups",
+    "auto_backup_interval_hours": 24,
+    "keep_backups": 7
+  },
+  "notifications": {
+    "desktop_notifications": true,
+    "sound_on_complete": false,
+    "email_notifications": false
+  }
     "allowed_extensions": {
       "video": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mkv", ".m4v"],
       "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a", ".wma"],

@@ -29,6 +29,10 @@ class ErrorCategory(Enum):
     CONFIGURATION = "configuration"
     SYSTEM = "system"
     USER_INPUT = "user_input"
+    CLOUDFLARE = "cloudflare"
+    CAPTCHA = "captcha"
+    RATE_LIMIT = "rate_limit"
+    CONTENT_PROTECTION = "content_protection"
 
 class ErrorHandler:
     """Comprehensive error handling and recovery system."""
@@ -378,6 +382,37 @@ def network_retry_recovery(func, max_attempts=3):
                 if attempt == max_attempts - 1:
                     raise
         return False
+    return recovery
+
+def cloudflare_bypass_recovery(func, user_agent_rotation=True):
+    """Recovery action for Cloudflare protected sites."""
+    def recovery():
+        user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0'
+        ]
+        
+        for ua in user_agents:
+            try:
+                time.sleep(5)  # Wait for Cloudflare
+                return func(user_agent=ua)
+            except Exception:
+                continue
+        return False
+    return recovery
+
+def captcha_solver_recovery(func, captcha_service=None):
+    """Recovery action for CAPTCHA challenges."""
+    def recovery():
+        try:
+            # In a real implementation, this would integrate with services like 2captcha
+            logging.warning("CAPTCHA detected - manual intervention may be required")
+            time.sleep(30)  # Wait and retry
+            return func()
+        except Exception:
+            return False
     return recovery
 
 def file_permission_recovery(filepath):

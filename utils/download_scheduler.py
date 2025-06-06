@@ -169,7 +169,11 @@ class DownloadScheduler:
                 'tiktok': 'downloaders.tiktok_downloader.TikTokDownloader',
                 'instagram': 'downloaders.instagram_downloader.InstagramDownloader',
                 'reddit': 'downloaders.reddit_downloader.RedditDownloader',
-                'twitter': 'downloaders.twitter_downloader.TwitterDownloader'
+                'twitter': 'downloaders.twitter_downloader.TwitterDownloader',
+                'pornhub': 'downloaders.pornhub_downloader.PornhubDownloader',
+                'redgifs': 'downloaders.redgifs_downloader.RedgifsDownloader',
+                'coomer': 'downloaders.coomer_downloader.CoomerDownloader',
+                'kemono': 'downloaders.kemono_downloader.KemonoDownloader'
             }
             
             if platform not in downloader_map:
@@ -309,7 +313,20 @@ class DownloadScheduler:
                 'tiktok': {'requests_per_minute': 20, 'min_delay': 2},
                 'instagram': {'requests_per_minute': 15, 'min_delay': 3},
                 'reddit': {'requests_per_minute': 60, 'min_delay': 0.5},
-                'twitter': {'requests_per_minute': 25, 'min_delay': 1.5}
+                'twitter': {'requests_per_minute': 25, 'min_delay': 1.5},
+                'pornhub': {'requests_per_minute': 20, 'min_delay': 3},
+                'redgifs': {'requests_per_minute': 25, 'min_delay': 2},
+                'coomer': {'requests_per_minute': 10, 'min_delay': 6},
+                'kemono': {'requests_per_minute': 10, 'min_delay': 6},
+                'adult_sites': {'requests_per_minute': 8, 'min_delay': 7},
+                'urlebird': {'requests_per_minute': 8, 'min_delay': 7},
+                'ttthots': {'requests_per_minute': 6, 'min_delay': 10},
+                'sotwe': {'requests_per_minute': 10, 'min_delay': 6},
+                'fapsly': {'requests_per_minute': 5, 'min_delay': 12},
+                'imhentai': {'requests_per_minute': 10, 'min_delay': 6},
+                'hentaiera': {'requests_per_minute': 10, 'min_delay': 6},
+                'nhentai': {'requests_per_minute': 8, 'min_delay': 7},
+                'default_adult': {'requests_per_minute': 6, 'min_delay': 10}
             }
             
             platform_limits = limits.get(platform, {'requests_per_minute': 30, 'min_delay': 1})
