@@ -161,9 +161,9 @@
   "license": {
     "trial_days": 30,
     "features": {
-      "max_concurrent_downloads_trial": 2,
-      "max_concurrent_downloads_full": 10,
-      "supported_platforms_trial": ["youtube", "tiktok", "reddit"],
+      "max_concurrent_downloads_trial": 1000,
+      "max_concurrent_downloads_full": 1000,
+      "supported_platforms_trial": "all",
       "supported_platforms_full": "all"
     }
   },
@@ -177,8 +177,8 @@
     "desktop_notifications": true,
     "sound_on_complete": false,
     "email_notifications": false
-  }
-    "allowed_extensions": {
+  },
+  "allowed_extensions": {
       "video": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mkv", ".m4v"],
       "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a", ".wma"],
       "image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"]
@@ -187,7 +187,6 @@
       "max_file_size": null,
       "min_file_size": 1024,
       "warn_large_files": 104857600
-    }
   },
   "media_processing": {
     "ffmpeg_path": "ffmpeg",
@@ -195,7 +194,8 @@
     "enable_processing": true,
     "auto_convert_formats": false,
     "normalize_audio": false,
-    "remove_metadata": false,
+    "remove_metadata": false
+  }, 
     "quality_settings": {
       "video_bitrate": "2M",
       "audio_bitrate": "128k",
@@ -209,7 +209,6 @@
       "transition_duration": 0.5,
       "background_color": "black",
       "fit_mode": "contain"
-    }
   },
   "logging": {
     "level": "INFO",
