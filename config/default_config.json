@@ -1,0 +1,221 @@
+{
+  "download_directory": "~/Downloads/SocialMediaDownloader",
+  "max_concurrent_downloads": 3,
+  "organize_by_platform": true,
+  "skip_existing_files": true,
+  "add_date_to_filename": false,
+  "sanitize_filenames": true,
+  "default_video_quality": "best",
+  "audio_format": "mp3",
+  "enable_detailed_logging": true,
+  "retry_attempts": 3,
+  "request_timeout": 30,
+  "youtube": {
+    "extract_audio": false,
+    "write_thumbnail": true,
+    "write_info_json": true,
+    "format_selector": "best[height<=1080]",
+    "extract_flat": false,
+    "ignore_errors": false,
+    "download_archive": true,
+    "write_description": false,
+    "write_annotations": false,
+    "write_subtitles": false,
+    "write_auto_sub": false,
+    "subtitle_lang": "en",
+    "embed_subs": false,
+    "embed_thumbnail": false,
+    "add_metadata": true,
+    "geo_bypass": true,
+    "prefer_free_formats": false,
+    "max_downloads": null,
+    "min_filesize": null,
+    "max_filesize": null,
+    "date_filter": {
+      "after": null,
+      "before": null
+    }
+  },
+  "tiktok": {
+    "process_slideshows": true,
+    "slideshow_duration_per_image": 3.0,
+    "download_with_watermark": false,
+    "include_music": true,
+    "max_resolution": "1080p",
+    "download_comments": false,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "api_headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Cache-Control": "no-cache",
+      "Pragma": "no-cache",
+      "Sec-Fetch-Dest": "empty",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "same-site"
+    },
+    "slideshow_settings": {
+      "video_codec": "libx264",
+      "audio_codec": "aac",
+      "pixel_format": "yuv420p",
+      "frame_rate": 30,
+      "video_bitrate": "2M",
+      "audio_bitrate": "128k"
+    }
+  },
+  "instagram": {
+    "include_stories": false,
+    "download_comments": false,
+    "download_tagged_users": false,
+    "include_highlights": false,
+    "download_profile_pic": true,
+    "max_resolution": "original",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "request_delay": 2.0,
+    "session_file": null,
+    "login_required": false,
+    "two_factor_enabled": false,
+    "api_headers": {
+      "Accept": "*/*",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Cache-Control": "no-cache",
+      "Pragma": "no-cache",
+      "X-Instagram-AJAX": "1",
+      "X-Requested-With": "XMLHttpRequest"
+    }
+  },
+  "reddit": {
+    "min_score": 0,
+    "skip_nsfw": false,
+    "download_comments": false,
+    "max_comment_depth": 3,
+    "include_post_metadata": true,
+    "user_agent": "Social Media Downloader Bot 1.0",
+    "request_delay": 1.0,
+    "supported_domains": [
+      "imgur.com",
+      "i.imgur.com",
+      "redgifs.com",
+      "gfycat.com",
+      "i.redd.it",
+      "v.redd.it",
+      "youtube.com",
+      "youtu.be"
+    ],
+    "api_headers": {
+      "Accept": "application/json",
+      "User-Agent": "Social Media Downloader Bot 1.0"
+    },
+    "imgur_client_id": null,
+    "redgifs_api_key": null
+  },
+  "redgifs": {
+    "download_quality": "hd",
+    "include_thumbnails": false,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "request_delay": 2.0,
+    "api_base": "https://api.redgifs.com/v2"
+  },
+  "xvideos": {
+    "download_quality": "high",
+    "include_thumbnails": false,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "request_delay": 3.0,
+    "age_verification": true
+  },
+  "general": {
+    "chunk_size": 8192,
+    "max_retries": 3,
+    "retry_delay": 2.0,
+    "connection_timeout": 30.0,
+    "read_timeout": 60.0,
+    "verify_ssl": true,
+    "follow_redirects": true,
+    "max_redirects": 10,
+    "rate_limit_delay": 1.0,
+    "user_agents": [
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0"
+    ]
+  },
+  "file_handling": {
+    "duplicate_action": "skip",
+    "invalid_chars_replacement": "_",
+    "max_filename_length": 200,
+    "preserve_timestamps": true,
+    "create_subdirectories": true,
+    "hash_algorithm": "md5",
+    "backup_originals": false,
+    "compress_downloads": false,
+    "allowed_extensions": {
+      "video": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mkv", ".m4v"],
+      "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a", ".wma"],
+      "image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"]
+    },
+    "size_limits": {
+      "max_file_size": null,
+      "min_file_size": 1024,
+      "warn_large_files": 104857600
+    }
+  },
+  "media_processing": {
+    "ffmpeg_path": "ffmpeg",
+    "ffprobe_path": "ffprobe",
+    "enable_processing": true,
+    "auto_convert_formats": false,
+    "normalize_audio": false,
+    "remove_metadata": false,
+    "quality_settings": {
+      "video_bitrate": "2M",
+      "audio_bitrate": "128k",
+      "video_codec": "libx264",
+      "audio_codec": "aac",
+      "preset": "medium",
+      "crf": 23
+    },
+    "slideshow_defaults": {
+      "duration_per_image": 3.0,
+      "transition_duration": 0.5,
+      "background_color": "black",
+      "fit_mode": "contain"
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "max_file_size": 10485760,
+    "backup_count": 5,
+    "log_downloads": true,
+    "log_errors": true,
+    "log_progress": false,
+    "performance_logging": false,
+    "cleanup_days": 30
+  },
+  "ui": {
+    "theme": "default",
+    "window_size": {
+      "width": 800,
+      "height": 600
+    },
+    "window_position": "center",
+    "remember_window_state": true,
+    "show_progress_details": true,
+    "auto_scroll_queue": true,
+    "confirm_deletions": true,
+    "show_notifications": true,
+    "minimize_to_tray": false,
+    "close_to_tray": false
+  },
+  "advanced": {
+    "enable_experimental_features": false,
+    "debug_mode": false,
+    "profile_performance": false,
+    "cache_enabled": true,
+    "cache_size_mb": 100,
+    "update_check": true,
+    "telemetry_enabled": false,
+    "parallel_processing": true,
+    "memory_limit_mb": 512,
+    "temp_directory": null
+  }
+}
